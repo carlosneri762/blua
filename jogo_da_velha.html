@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo da Velha</title>
+    <style>
+        div {
+            height: 100px;
+            width: 100px;
+            background-color: gray;
+            display: inline-block;
+            font-size: 80px;
+            text-align: center;
+            line-height: 100px;
+        }
+        .x {
+            color: blue;
+        }
+        .o {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <br>
+    <br>
+    <div id="0"></div>
+    <div id="1"></div>
+    <div id="2"></div><br>
+    <div id="3"></div>
+    <div id="4"></div>
+    <div id="5"></div><br>
+    <div id="6"></div>
+    <div id="7"></div>
+    <div id="8"></div>
+
+    <script>
+        let player = "x";
+
+        function setPlayer() {
+            player = player === "x" ? "o" : "x";
+        }
+
+        const tabuleiro = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function ganhou() {
+            for (let i = 0; i < tabuleiro.length; i++) {
+                const [a, b, c] = tabuleiro[i];
+                if (document.getElementById(a).textContent &&
+                    document.getElementById(a).textContent === document.getElementById(b).textContent &&
+                    document.getElementById(a).textContent === document.getElementById(c).textContent) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function handleClick(event) {
+            const square = event.target;
+            if (square.textContent === "") {
+                square.textContent = player;
+                square.classList.add(player);
+                if (ganhou()) {
+                    setTimeout(() => {
+                        alert(`Jogador ${player.toUpperCase()} venceu!`);
+                        reset();
+                    }, 100);
+                } else {
+                    setPlayer();
+                }
+            }
+        }
+
+        function reset() {
+            const squares = document.querySelectorAll("div");
+            squares.forEach(square => {
+                square.textContent = "";
+                square.classList.remove("x", "o");
+            });
+            player = "x";
+        }
+
+        const squares = document.querySelectorAll("div");
+        squares.forEach(square => square.addEventListener("click", handleClick));
+    </script>
+</body>
+</html>
